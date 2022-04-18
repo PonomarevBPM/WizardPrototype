@@ -5,64 +5,53 @@ using UnityEngine;
 
 namespace Wizard2D
 {
-		[RequireComponent(typeof(Rigidbody2D))]
+		
 
 	public class MoveController2D : MonoBehaviour
 	{
-		[SerializeField]
-		private float speed, addForce;
-		private float horizontalDirection;
-		private Rigidbody2D body;
-		private bool jump;
+        [SerializeField] private float speed; 
+        [SerializeField] private float jumpForce;
+        private bool canJumping;
 
-		void Start()
-		{
-			body = GetComponent<Rigidbody2D>();
-			
-			
-		}
+        Rigidbody2D rb;
 
-		void OnCollisionStay2D(Collision2D coll)
-		{
-			//Проверка на земле ли игрок
-			if (coll.transform.tag == "Ground")
-			{
-				
-				jump = true;
-			}
-		}
+        private void Start()
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
 
-		void OnCollisionExit2D(Collision2D coll)
-		{
-			if (coll.transform.tag == "Ground")
-			{
-				jump = false;
-			}
-		}
+        private void Update()
+        {
+            canJumping = GetComponent<Collider2D>().IsTouchingLayers(LayerMask.GetMask("Ground", "Enemies"));
 
-		void FixedUpdate()
-		{
-	
-			horizontalDirection = Input.GetAxisRaw("Horizontal");
+            if (Input.GetKeyDown(KeyCode.Space)&&canJumping)
+            {
+                rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
+            }
+        }
 
-			body.velocity = new Vector2(horizontalDirection * speed * Time.deltaTime, 0f);
+        private void FixedUpdate()
+        {
 
-			if (Input.GetButton("Jump") && jump)
-				{
-					body.velocity = new Vector2(0, addForce);
-				}
-			Flip();
-		}
+            float moveHorizontal = Input.GetAxis("Horizontal");
 
-		void Flip()	
-		{
-			if (body.velocity.x > 0) {
-				transform.localScale =  new Vector2(1, transform.localScale.y);
-			} else if (body.velocity.x < 0) {
-				transform.localScale =  new Vector2(-1, transform.localScale.y);
-			}
-		}
+            Vector2 moving = new Vector2 (moveHorizontal * speed, rb.velocity.y);
+            rb.velocity = moving;
+            
+            if (moveHorizontal > 0)
+            {
+                transform.localScale = new Vector2(1,1);   
+            }
+            if (moveHorizontal < 0)
+            {
+                transform.localScale = new Vector2(-1, 1);
+            }    
+        }
 
-	}
+        
+
+
+
+    }
 }
 
