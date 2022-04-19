@@ -12,20 +12,20 @@ namespace Wizard2D
 
         [SerializeField] private float speed; 
         [SerializeField] private float jumpForce;
-        private bool canJumping;
-        Rigidbody2D rb;
+        private Rigidbody2D rb;
+        private Collider2D coll;
 
         private void Start()
         {
             rb = GetComponent<Rigidbody2D>();
+            coll = GetComponent<Collider2D>();
         }
 
         private void Update()
         {
             // Можно прыгать, если коллайдер игрока трогает слой земля или противник
-            canJumping = GetComponent<Collider2D>().IsTouchingLayers(LayerMask.GetMask("Ground", "Enemies"));
 
-            if (Input.GetKeyDown(KeyCode.Space)&&canJumping)
+            if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
             {
                 rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
             }
@@ -50,7 +50,10 @@ namespace Wizard2D
             }    
         }
 
-        
+        private bool IsGrounded(){
+            RaycastHit2D raycastHit2D = Physics2D.BoxCast(coll.bounds.center,coll.bounds.size,0f,Vector2.down,.1f,LayerMask.GetMask("Ground","Enemies"));
+            return raycastHit2D.collider !=null;
+        }
 
 
 
