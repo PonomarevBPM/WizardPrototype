@@ -42,9 +42,7 @@ namespace Wizard2D
             //Вместо изменения скейла, теперь вращаем вокруг оси y, что позволит снарядам лететь в нужную сторну всегда
             if (moveHorizontal > 0)
             {
-                transform.rotation = Quaternion.Euler(0,0,0);   
-
-                
+                transform.rotation = Quaternion.Euler(0,0,0);
             }
             if (moveHorizontal < 0)
             {

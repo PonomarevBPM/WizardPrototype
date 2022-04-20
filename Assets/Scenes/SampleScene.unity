@@ -361,8 +361,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aed3a5b981e294b4a8865306a43d66fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projPrefab: {fileID: 2622594554028573439, guid: 64cc07f5dca83a74ebde1095db47416d, type: 3}
   spawnPoint: {fileID: 174027629}
+  elementSpriteArray:
+  - {fileID: 21300000, guid: a06f57f944ee8394ba9653512af397c7, type: 3}
+  - {fileID: 21300000, guid: b48aa7225121d5741ab375acafc63139, type: 3}
+  - {fileID: 21300000, guid: fdc10bbf68a51e749a1cdb15d037dd79, type: 3}
+  projPrefab:
+  - {fileID: 2622594554028573439, guid: 64cc07f5dca83a74ebde1095db47416d, type: 3}
+  - {fileID: 1006412109324610547, guid: 628333d38542a8a41b1d754a645d5f6c, type: 3}
+  - {fileID: 8643139275191548614, guid: 62dd2baaee74004429c620922bff836f, type: 3}
+  cooldownTime: 1
 --- !u!1 &743940347
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,7 +409,7 @@ Transform:
   m_GameObject: {fileID: 743940347}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2003937429}
   m_Father: {fileID: 0}
@@ -580,7 +588,7 @@ GameObject:
   - component: {fileID: 1702566582}
   - component: {fileID: 1702566583}
   m_Layer: 7
-  m_Name: Characters
+  m_Name: Zombie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
