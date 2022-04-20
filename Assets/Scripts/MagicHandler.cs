@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class MagicHandler : MonoBehaviour
 {
-    //Префаб снаряда
-    [SerializeField] private GameObject projPrefab;
     [SerializeField] private Transform spawnPoint;
     private SpriteRenderer spriteRenderer;
-    int index;
-
-    public Sprite[] spriteArray;
+    private int elemetalPower = 0;
+    [HideInInspector] public bool isFire, isWater, isArcane;
+    public Sprite[] elementSpriteArray = new Sprite[3];
+    [SerializeField] private GameObject[] projPrefab = new GameObject[3];
     void Start()
     {
+        isArcane = true;
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
@@ -20,23 +20,26 @@ public class MagicHandler : MonoBehaviour
     void Update()
     {
         if(Input.GetButtonDown("Fire1")){
-            //Спавним снаряд из spawnPoint в напрвлении как сам spawnpoint
-            Instantiate(projPrefab,spawnPoint.position,spawnPoint.rotation);
+            //Спавним снаряд нужного элемента из spawnPoint в напрвлении как сам spawnpoint
+            Instantiate(projPrefab[elemetalPower],spawnPoint.position,spawnPoint.rotation);
         }
 
         if (Input.GetButtonDown("Fire3")){
             ChangeElement(spriteRenderer.sprite);
         }
     }
-
+    //Меняем элементы по очереди
      void ChangeElement(Sprite spriteOnCharacter)
      {
-        index = System.Array.IndexOf(spriteArray,spriteOnCharacter);
-
-        if(index == spriteArray.Length - 1){
-            spriteRenderer.sprite = spriteArray[0];
+         //Находим индекс спрайта в массиве спрайтов
+        elemetalPower = System.Array.IndexOf(elementSpriteArray,spriteOnCharacter);
+        // Если индекс последнего элемента, то меняем на первый
+        if(elemetalPower == elementSpriteArray.Length - 1){
+            elemetalPower = 0;
         } else {
-            spriteRenderer.sprite = spriteArray[index+1];
-        } 
+            //Если индекс не последний, то меняем на следующий
+            elemetalPower++;
+        } //Меняем спрайт игрока на спрайт следующего элемента
+        spriteRenderer.sprite = elementSpriteArray[elemetalPower];
     }
 }
