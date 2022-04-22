@@ -5,6 +5,7 @@ using UnityEngine;
 public class MagicHandler : MonoBehaviour
 {
     [SerializeField] private Transform spawnPoint;
+    [SerializeField] private ParticleSystem flameParticleSystem;
     private SpriteRenderer spriteRenderer;
     private int elemetalPower = 0;
     public Sprite[] elementSpriteArray = new Sprite[3];
@@ -12,6 +13,7 @@ public class MagicHandler : MonoBehaviour
     private Collider2D coll;
     [SerializeField] private float cooldownTime;
     private float lastAbilityTime;
+
     void Start()
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -47,6 +49,9 @@ public class MagicHandler : MonoBehaviour
             elemetalPower++;
         } //Меняем спрайт игрока на спрайт следующего элемента
         spriteRenderer.sprite = elementSpriteArray[elemetalPower];
+
+        if(elemetalPower != 1) 
+            flameParticleSystem.Stop();
     }
 
     void HandleElementalSkill()
@@ -54,17 +59,17 @@ public class MagicHandler : MonoBehaviour
         //Общий кулдаун для всех способностей, можно задавать в инспекторе. Если еще куладун то выходим из метода
         if(Time.time - lastAbilityTime < cooldownTime)
             return;
-        //Задаем время последнего использования, чтобы начать отсчет куладуна
-        lastAbilityTime = Time.time;
 
         switch(elemetalPower)
         {
             case 0:
                 DoArcaneTeleport();
+                lastAbilityTime = Time.time; //Задаем время последнего использования, чтобы начать отсчет куладуна
                 break;
 
             case 1:
-
+                DoFlameThrower();
+                
                 break;
 
             case 2:
@@ -81,7 +86,7 @@ public class MagicHandler : MonoBehaviour
 
         startPosition = transform.position;
         //Луч проверяет есть ли впреди земля, если не проверть то телепортирует в текстуры
-        RaycastHit2D raycastHit2D = Physics2D.Raycast(startPosition,transform.right,travelDistance,LayerMask.GetMask("Ground"));
+        RaycastHit2D raycastHit2D = Physics2D.Raycast(startPosition,transform.right,travelDistance,LayerMask.GetMask("Ground","IceSpikes"));
         //Проверяем какая дистанция до земли? Она должна быть больше чем пол тела игрока и меньше чем максимальная дистанция телепорта
         if(raycastHit2D.distance > coll.bounds.size.x/2 && raycastHit2D.distance <= travelDistance){
             travelDistance = raycastHit2D.distance - (coll.bounds.size.x/1.9f);  //Выставляем дистанцию телепорта на растояние до земли
@@ -91,6 +96,29 @@ public class MagicHandler : MonoBehaviour
                 transform.Translate(transform.right*travelDistance); //Телепорт в право
             else if(transform.rotation.eulerAngles.y == 180)
                 transform.Translate(transform.right * -travelDistance); //Телепорт в лево
+        }
+    }
+
+    void DoFlameThrower()
+    {
+        if(flameParticleSystem.isPlaying){
+            flameParticleSystem.Stop();
+            StopCoroutine("CoroutineFlameThrower");
+        }
+        else{
+            flameParticleSystem.Play();
+            StartCoroutine("CoroutineFlameThrower");
+        }
+    }
+
+    private IEnumerator CoroutineFlameThrower()
+    {
+        while(flameParticleSystem.isPlaying){
+        RaycastHit2D raycastHit2D = Physics2D.Raycast(spawnPoint.position,spawnPoint.transform.right,2f);
+        if(raycastHit2D.collider != null && raycastHit2D.transform.gameObject.CompareTag("IceSpikes")){
+            Destroy(raycastHit2D.transform.gameObject);
+        }
+        yield return null;
         }
     }
 }
