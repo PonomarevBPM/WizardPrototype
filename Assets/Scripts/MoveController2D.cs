@@ -42,7 +42,7 @@ namespace Wizard2D
             //Вместо изменения скейла, теперь вращаем вокруг оси y, что позволит снарядам лететь в нужную сторну всегда
             if (moveHorizontal > 0)
             {
-                transform.rotation = Quaternion.Euler(0,0,0);   
+                transform.rotation = Quaternion.Euler(0,0,0);
             }
             if (moveHorizontal < 0)
             {
@@ -51,7 +51,7 @@ namespace Wizard2D
         }
 
         private bool IsGrounded(){
-            RaycastHit2D raycastHit2D = Physics2D.BoxCast(coll.bounds.center,coll.bounds.size,0f,Vector2.down,.1f,LayerMask.GetMask("Ground","Enemies"));
+            RaycastHit2D raycastHit2D = Physics2D.BoxCast(coll.bounds.center,coll.bounds.size,0f,Vector2.down,.01f,LayerMask.GetMask("Ground","Enemies"));
             return raycastHit2D.collider !=null;
         }
 

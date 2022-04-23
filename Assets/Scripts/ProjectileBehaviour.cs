@@ -28,7 +28,7 @@ public class ProjectileBehaviour : MonoBehaviour
         Destroy(gameObject);
         Destroy(other.gameObject);
         }//Если это земля, то уничтожаем только снаряд
-         else if (other.CompareTag("Ground")){ 
+         else if (other.CompareTag("Ground") || other.CompareTag("IceSpikes")){ 
             Destroy(gameObject);
         }
     }
