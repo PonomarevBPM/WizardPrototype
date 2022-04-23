@@ -100,10 +100,10 @@ public class MagicHandler : MonoBehaviour
     }
 
     void DoFlameThrower()
-    {
+    { //
         if(flameParticleSystem.isPlaying){
             flameParticleSystem.Stop();
-            StopCoroutine("CoroutineFlameThrower");
+            StopCoroutine("CoroutineFlameThrower"); 
         }
         else{
             flameParticleSystem.Play();
@@ -111,6 +111,7 @@ public class MagicHandler : MonoBehaviour
         }
     }
 
+    //Каждый кадр,пока работает огнемет, кастуем луч, если он задеват ледяной шип,то уничтожаем шип
     private IEnumerator CoroutineFlameThrower()
     {
         while(flameParticleSystem.isPlaying){
