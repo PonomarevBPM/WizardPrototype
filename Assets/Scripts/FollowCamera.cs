@@ -17,7 +17,12 @@ namespace Wizard2D
         void Follow()
         {
             Vector3 targetPosition = target.position + offset;
-            Vector3 smoothPosition = Vector3.Lerp(transform.position, targetPosition, smoothFactor * Time.fixedDeltaTime);
+            Vector3 boundPosition = new Vector3(
+            targetPosition.x, 
+            Mathf.Clamp(targetPosition.y,-1000,5f),
+            targetPosition.z);
+
+            Vector3 smoothPosition = Vector3.Lerp(transform.position, boundPosition, smoothFactor * Time.fixedDeltaTime);
             transform.position = smoothPosition;
         }
     }
