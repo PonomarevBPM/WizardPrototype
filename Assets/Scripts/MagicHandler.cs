@@ -8,18 +8,20 @@ public class MagicHandler : MonoBehaviour
     [SerializeField] private ParticleSystem flameParticleSystem;
     [SerializeField] private ParticleSystem teleportParticleSysytemIn;
     [SerializeField] private ParticleSystem teleportParticleSysytemOut;
-    private SpriteRenderer spriteRenderer;
-    private int elemetalPower = 0;
-    public Sprite[] elementSpriteArray = new Sprite[3];
+    [HideInInspector]public int elemetalPower = 0;
     [SerializeField] private GameObject[] projPrefab = new GameObject[3];
     private Collider2D coll;
     [SerializeField] private float cooldownTime;
+    private PlayerStateMachine playerStateMachine;
+    private MoveController2D moveController2D;
     private float lastAbilityTime;
 
     void Start()
     {
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
         coll = GetComponent<Collider2D>();
+        playerStateMachine = GetComponent<PlayerStateMachine>();
+        moveController2D = GetComponent<MoveController2D>();
     }
 
    
@@ -31,7 +33,7 @@ public class MagicHandler : MonoBehaviour
         }
 
         if (Input.GetButtonDown("Fire3")){
-            ChangeElement(spriteRenderer.sprite);
+            ChangeElement();
         }
 
         if(Input.GetButtonDown("Fire2")){
@@ -39,21 +41,18 @@ public class MagicHandler : MonoBehaviour
         }
     }
     //Меняем элементы по очереди
-     void ChangeElement(Sprite spriteOnCharacter)
+     void ChangeElement()
      {
-         //Находим индекс спрайта в массиве спрайтов
-        elemetalPower = System.Array.IndexOf(elementSpriteArray,spriteOnCharacter);
-        // Если индекс последнего элемента, то меняем на первый
-        if(elemetalPower == elementSpriteArray.Length - 1){
-            elemetalPower = 0;
-        } else {
-            //Если индекс не последний, то меняем на следующий
+         if(elemetalPower<2)
             elemetalPower++;
-        } //Меняем спрайт игрока на спрайт следующего элемента
-        spriteRenderer.sprite = elementSpriteArray[elemetalPower];
+         else
+            elemetalPower = 0;
+
+        playerStateMachine.SetElementalAnimation(elemetalPower);
 
         if(elemetalPower != 1) 
             flameParticleSystem.Stop();
+
     }
 
     void HandleElementalSkill()
@@ -65,8 +64,11 @@ public class MagicHandler : MonoBehaviour
         switch(elemetalPower)
         {
             case 0:
+                if(!moveController2D.IsGrounded())
+                {
                 DoArcaneTeleport();
-                lastAbilityTime = Time.time; //Задаем время последнего использования, чтобы начать отсчет куладуна
+                lastAbilityTime = Time.time; //Задаем время последнего использования, чтобы начать отсчет куладуна    
+                }
                 break;
 
             case 1:
