@@ -7,6 +7,7 @@ TagManager:
   - Ground
   - Enemy
   - IceSpikes
+  - CamZoom
   layers:
   - Default
   - TransparentFX
@@ -49,6 +50,9 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Player
+    uniqueID: 827990355
     locked: 0
   - name: Forward
     uniqueID: 984749065

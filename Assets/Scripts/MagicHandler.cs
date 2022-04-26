@@ -127,10 +127,11 @@ public class MagicHandler : MonoBehaviour
     private IEnumerator CoroutineFlameThrower()
     {
         while(flameParticleSystem.isPlaying){
-        RaycastHit2D raycastHit2D = Physics2D.Raycast(spawnPoint.position,spawnPoint.transform.right,2f);
-        if(raycastHit2D.collider != null && raycastHit2D.transform.gameObject.CompareTag("IceSpikes")){
-            Destroy(raycastHit2D.transform.gameObject);
-        }
+            RaycastHit2D raycastHit2D = Physics2D.Raycast(spawnPoint.position,spawnPoint.transform.right,2f);
+            if(raycastHit2D.collider != null && raycastHit2D.transform.gameObject.CompareTag("IceSpikes"))
+            {
+                Destroy(raycastHit2D.transform.gameObject);
+            }
         yield return null;
         }
     }
