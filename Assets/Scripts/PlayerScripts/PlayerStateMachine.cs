@@ -7,6 +7,8 @@ public class PlayerStateMachine : MonoBehaviour
     private Animator playerAnim;
     private Rigidbody2D rb;
     private MoveController2D moveController2D;
+    public bool hasKey;
+
     void Start()
     {
         playerAnim = GetComponent<Animator>();
@@ -32,5 +34,8 @@ public class PlayerStateMachine : MonoBehaviour
         playerAnim.SetInteger("elementalPower",element);
     }
 
-    
+    public void GetKey()
+    {
+        hasKey = true;
+    }
 }
